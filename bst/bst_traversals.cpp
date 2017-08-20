@@ -266,7 +266,7 @@ void dfd_using_stack(Node* root){
 		return;
 	}
 
-	
+
 
 }
 
@@ -275,7 +275,7 @@ void test_traversals(){
 
 	// build test tree 
 	Node* head = build_test_bst();
-	/*
+	
 	std::cout<<"Pre order traversal : "<<std::endl;
 	preorder_t(head);	
 	std::cout<<"Post order traversal : "<<std::endl;
@@ -290,7 +290,7 @@ void test_traversals(){
 	level_order_without_queue(head);
 	std::cout<<"Vertical order traversal using maps is : "<<std::endl;
 	vertical_order_traversal(head);
-	*/
+	
 	std::cout<<"Depth first search :"<<std::endl;
 	dfs(head);
 }
