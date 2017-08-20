@@ -2,10 +2,12 @@
 #include <queue>
 #include <map>
 #include <vector>
+#include <stack>
 
 using std::queue;
 using std::map;
 using std::vector;
+using std::stack;
 
 //create a nodetype in bst
 typedef struct Node{
@@ -260,12 +262,33 @@ void vertical_order_traversal(Node* root){
 }
 
 //performs depth first search on tree using stack
-void dfd_using_stack(Node* root){
+void dfs(Node* root){
 
 	if(NULL == root){
 		return;
 	}
 
+	// initialize q queue and push root
+	stack<Node*> s ;
+	s.push(root);
+
+	// check queue is not empty
+    while(false == s.empty()){
+
+    	Node* node = s.top();
+		//print node data
+		std::cout<<node->data<<std::endl;
+		s.pop(); // remove from queue
+
+		//stack up Node's right and left child
+		if(NULL != node->right){
+			s.push(node->right);
+		}
+
+		if(NULL != node->left){
+			s.push(node->left);
+		}
+	}
 
 
 }
@@ -290,7 +313,6 @@ void test_traversals(){
 	level_order_without_queue(head);
 	std::cout<<"Vertical order traversal using maps is : "<<std::endl;
 	vertical_order_traversal(head);
-	
 	std::cout<<"Depth first search :"<<std::endl;
 	dfs(head);
 }
