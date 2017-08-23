@@ -3,11 +3,14 @@
 #include <map>
 #include <vector>
 #include <stack>
+#include <utility>
+#include <cassert>
 
 using std::queue;
 using std::map;
 using std::vector;
 using std::stack;
+using std::pair;
 
 //create a nodetype in bst
 typedef struct Node{
@@ -293,6 +296,76 @@ void dfs(Node* root){
 
 }
 
+int get_width(Node* root){
+
+ 	if(NULL == root){
+ 		return 0;
+ 	}
+
+ 	//use modified queue type to index the nodes in the tree 
+ 	std::queue< pair<Node*, int> > q;
+
+ 	// root has index 1
+ 	// keep track of node and it's index
+ 	//      1
+ 	//     / \
+ 	//    2    3
+ 	//   / \  / \
+ 	//   4  5 6  7 and so on .. 
+ 	//
+ 	// left nodes can be indexed as 2*idx (idx is the index of parent node)
+ 	// right nodes be indexed as 2*idx+1 
+ 	// level width is the difference between left most node index
+ 	// and right most node index 
+ 	q.push(pair<Node*, int>(root, 1));
+
+ 	int max_width = 0;
+ 	int l_width = 0;
+ 	int lh =0,rh = 0;
+
+ 	while(false == q.empty()){
+ 		int node_c = q.size();
+ 		int idx = q.front().second;
+
+ 		// track left most node index of the level
+ 		lh = 2*idx;
+		
+		while(node_c > 0){
+
+ 			Node* node = q.front().first;
+ 			idx = q.front().second;
+
+ 			// remove the node from queue
+ 			q.pop();
+
+ 			// keep track of max_width until now
+ 			if(max_width < l_width){
+ 				max_width = l_width;
+ 			}
+
+ 			// update the right index to derive the diff between left and right indices per level
+ 			// Width = max diff between right index and left index
+ 			if(NULL != node->left){
+ 				q.push(pair<Node*, int>(node->left,2*idx));
+ 				rh = 2*idx;
+ 			}
+ 			if(NULL != node->right){
+ 				q.push(pair<Node*, int>(node->right, 2*idx+1));
+ 				rh = 2*idx+1;
+ 			}
+
+ 			node_c = node_c-1;
+ 		}
+ 		// width of this level if basically diff between left most index
+ 		// and right most index of the node
+ 		l_width = rh - lh;
+ 	} 
+
+return max_width;
+}
+
+
+
 // test stubs to check different traversals
 void test_traversals(){
 
@@ -315,6 +388,9 @@ void test_traversals(){
 	vertical_order_traversal(head);
 	std::cout<<"Depth first search :"<<std::endl;
 	dfs(head);
+	assert(3==get_width(head));
+
+	std::cout<<"Tests complete "<<std::endl;
 }
 
 
